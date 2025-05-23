@@ -2,12 +2,10 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground px-4 py-10 gap-10">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-background px-4 py-10 gap-10">
       <header className="text-center space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-          Concorso Nibol
-        </h1>
-        <p className="text-muted-foreground text-sm sm:text-base">
+        <h1 className="text-3xl font-bold sm:text-4xl">Concorso Nibol</h1>
+        <p className=" text-sm sm:text-base">
           Questo progetto partecipa al concorso per entrare in{" "}
           <strong>Nibol</strong>.
         </p>
@@ -25,7 +23,7 @@ export default function Home() {
         </Link>
         <Link
           href="/signup"
-          className="bg-foreground text-background hover:bg-[#383838] dark:hover:bg-[#ccc] transition-colors px-5 py-2 rounded-full text-sm font-medium"
+          className="bg-orange-600 text-background hover:bg-orange-700 transition-colors px-5 py-2 rounded-full text-sm font-medium"
         >
           Sign Up
         </Link>

@@ -13,6 +13,7 @@ import Link from "next/link";
 import React from "react";
 import { validatePassword } from "./utils/validatePassword";
 import PasswordStrengthBar from "./passwordStrengthBar";
+import { useAuth } from "@/hooks/useAuth";
 
 export function SignupForm({
   className,
@@ -23,6 +24,7 @@ export function SignupForm({
   const emailRef = React.useRef<HTMLInputElement>(null);
   const [password, setPassword] = React.useState<string>("");
   const [error, setError] = React.useState<string>("");
+  const { register } = useAuth();
 
   // funzione per validare la password
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,6 +48,7 @@ export function SignupForm({
 
     if (name && surname && email && password) {
       // Handle signup logic here
+      register(name, surname, email, password);
       console.log("Signup successful", { name, surname, email, password });
     }
   };

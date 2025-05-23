@@ -6,8 +6,14 @@ import { toast } from "sonner";
 interface AuthContextType {
   token: string | null;
   login: (email: string, password: string) => boolean;
+  isLoading: boolean;
   logout: () => void;
-  register: (username: string, password: string) => boolean;
+  register: (
+    name: string,
+    username: string,
+    email: string,
+    password: string
+  ) => boolean;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(
@@ -20,9 +26,10 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [token, setToken] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-
+  console.log(isLoading);
   useEffect(() => {
     const savedToken = localStorage.getItem("token");
     if (savedToken) setToken(savedToken);
@@ -33,11 +40,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const fakeToken = "trallallerotrallalla";
       setToken(fakeToken);
       localStorage.setItem("token", fakeToken);
-
+      setIsLoading(true);
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
-
       timeoutRef.current = setTimeout(() => {
-        router.push("/welcome");
+        setIsLoading(false);
+        router.replace("/welcome");
       }, 1500);
       return true;
     }
@@ -59,7 +66,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     });
   };
 
-  const register = (email: string, password: string): boolean => {
+  const register = (
+    name: string,
+    surname: string,
+    email: string,
+    password: string
+  ): boolean => {
     const success = true;
 
     if (success) {
@@ -71,6 +83,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           border: "1px solid #4ade80",
         },
       });
+      const fakeToken = "trallallerotrallalla";
+      setToken(fakeToken);
+      localStorage.setItem("token", fakeToken);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      setIsLoading(true);
+      timeoutRef.current = setTimeout(() => {
+        router.replace("/welcome");
+        setIsLoading(false);
+      }, 1500);
     } else {
       toast("Registration failed", {
         duration: 1500,
@@ -86,7 +107,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ token, login, logout, register }}>
+    <AuthContext.Provider value={{ token, login, logout, register, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

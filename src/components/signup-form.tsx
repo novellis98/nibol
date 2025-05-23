@@ -1,6 +1,8 @@
-"use client";
+import React from "react";
+
+import { validatePassword } from "./utils/validatePassword";
+import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -8,12 +10,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import React from "react";
-import { validatePassword } from "./utils/validatePassword";
-import PasswordStrengthBar from "./passwordStrengthBar";
-import { useAuth } from "@/hooks/useAuth";
+import SignupInputs from "./signupInputs";
 
 export function SignupForm({
   className,
@@ -26,11 +24,9 @@ export function SignupForm({
   const [error, setError] = React.useState<string>("");
   const { register } = useAuth();
 
-  // funzione per validare la password
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newPassword = e.target.value;
     setPassword(newPassword);
-    // validazione della password
     const validation = validatePassword(newPassword);
     if (!validation.valid) {
       setError(validation.message || "Invalid password");
@@ -47,9 +43,7 @@ export function SignupForm({
     const email = emailRef.current?.value;
 
     if (name && surname && email && password) {
-      // Handle signup logic here
       register(name, surname, email, password);
-      console.log("Signup successful", { name, surname, email, password });
     }
   };
 
@@ -69,75 +63,14 @@ export function SignupForm({
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit}>
-            <div className="flex flex-col gap-6">
-              <div className="grid gap-3 ">
-                <Input
-                  id="first_name"
-                  type="text"
-                  placeholder="Riccardo"
-                  required
-                  ref={nameRef}
-                />
-              </div>
-              <div className="grid gap-3">
-                <Input
-                  id="last_name"
-                  type="text"
-                  placeholder="Suardi"
-                  required
-                  ref={surnameRef}
-                />
-              </div>
-              <div className="grid gap-3">
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="riccardo@nibol.com"
-                  required
-                  ref={emailRef}
-                />
-              </div>
-              <div className="grid gap-3">
-                <Input
-                  id="password"
-                  type="password"
-                  required
-                  placeholder="Password"
-                  value={password}
-                  onChange={handlePasswordChange}
-                />
-                {/* barra errori password */}
-                <PasswordStrengthBar password={password} error={error} />
-              </div>
-              <div className="flex items-start gap-2 text-sm">
-                <input
-                  id="terms"
-                  type="checkbox"
-                  required
-                  className="mt-1 accent-orange-600 cursor-pointer "
-                />
-                <label htmlFor="terms" className=" cursor-pointer ">
-                  Agree to our{" "}
-                  <a
-                    href="/terms"
-                    className="underline underline-offset-4 hover:text-foreground  "
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Terms and Conditions
-                  </a>
-                </label>
-              </div>
-
-              <div className="flex flex-col gap-3">
-                <Button
-                  type="submit"
-                  className="w-full bg-orange-600 hover:bg-orange-700"
-                >
-                  Create account
-                </Button>
-              </div>
-            </div>
+            <SignupInputs
+              nameRef={nameRef}
+              surnameRef={surnameRef}
+              emailRef={emailRef}
+              password={password}
+              error={error}
+              onPasswordChange={handlePasswordChange}
+            />
           </form>
         </CardContent>
       </Card>
